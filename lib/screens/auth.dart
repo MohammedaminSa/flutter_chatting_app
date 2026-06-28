@@ -40,15 +40,31 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          TextField(
+                          TextFormField(
                             decoration: InputDecoration(labelText: 'E-mail'),
                             keyboardType: TextInputType.emailAddress,
                             autocorrect: false,
                             textCapitalization: TextCapitalization.none,
+                            validator: (valuue) {
+                              if (valuue == null ||
+                                  valuue.isEmpty ||
+                                  !valuue.contains('@')) {
+                                return 'Please enter a valid email address.';
+                              }
+                              return null;
+                            },
                           ),
-                          TextField(
+                          TextFormField(
                             decoration: InputDecoration(labelText: 'Password'),
                             obscureText: true,
+                            validator: (value) {
+                              if (value == null ||
+                                  value.isEmpty ||
+                                  value.length < 6) {
+                                return 'Password must be at least 7 characters long.';
+                              }
+                              return null;
+                            },
                           ),
                           SizedBox(height: 16),
                           ElevatedButton(

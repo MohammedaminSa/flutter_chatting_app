@@ -4,7 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class UserImagePicker extends StatefulWidget {
-  const UserImagePicker({super.key});
+  const UserImagePicker({super.key, required this.onPickIamge});
+
+  final void Function(File pickedImage) onPickIamge;
+
   @override
   State<UserImagePicker> createState() => _UserImagePickerState();
 }
@@ -20,6 +23,8 @@ class _UserImagePickerState extends State<UserImagePicker> {
     setState(() {
       _pickedImageFile = File(pickedImage.path);
     });
+
+    widget.onPickIamge(_pickedImageFile!);
   }
 
   @override
@@ -38,7 +43,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
           icon: const Icon(Icons.image),
           label: Text(
             "Add Image",
-            style: TextStyle(color: Theme.of(context).primaryColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
         ),
       ],

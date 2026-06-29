@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import "dart:io";
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class UserImagePicker extends StatefulWidget {
   const UserImagePicker({super.key});
@@ -7,6 +10,18 @@ class UserImagePicker extends StatefulWidget {
 }
 
 class _UserImagePickerState extends State<UserImagePicker> {
+  File? _pickedImageFile;
+
+  void _pickImage() async {
+    final pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedImage == null) return;
+    setState(() {
+      _pickedImageFile = File(pickedImage.path);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -14,9 +29,18 @@ class _UserImagePickerState extends State<UserImagePicker> {
         CircleAvatar(
           radius: 40,
           backgroundColor: Colors.grey,
-          foregroundImage: ...,
+          foregroundImage: _pickedImageFile != null
+              ? FileImage(_pickedImageFile!)
+              : null,
         ),
-        TextButton.icon(onPressed:(){},icon: const Icon( Icons.image), label: Text("Add Image",style: TextStyle(color: Theme.of(context).primaryColor)),)
+        TextButton.icon(
+          onPressed: _pickImage,
+          icon: const Icon(Icons.image),
+          label: Text(
+            "Add Image",
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+        ),
       ],
     );
   }

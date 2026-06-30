@@ -3,7 +3,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import "dart:io";
 
 final _firebase = FirebaseAuth.instance;
@@ -25,6 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   var _enteredPassword = "";
   File? _selectedImage;
   var _isAuthenticating = false;
+  var _enteredUsername = "";
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
@@ -55,7 +55,7 @@ class _AuthScreenState extends State<AuthScreen> {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredentials.user!.uid)
-            .set({'email': _enteredEmail, "UserName": "to be done..."});
+            .set({'email': _enteredEmail, "UserName": _enteredUsername});
       }
 
       setState(() {
@@ -129,6 +129,24 @@ class _AuthScreenState extends State<AuthScreen> {
                               _enteredEmail = value!;
                             },
                           ),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: "UserName",
+                              ),
+                              enableSuggestions: false,
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.trim().length < 4) {
+                                  return 'Please enter a Valid username.';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                value = _enteredUsername;
+                              },
+                            ),
                           TextFormField(
                             decoration: InputDecoration(labelText: 'Password'),
                             obscureText: true,

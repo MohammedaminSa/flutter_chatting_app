@@ -57,9 +57,13 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('${userCredentials.user!.uid}.jpg');
 
         await storageRef.putFile(_selectedImage!);
-        final imageUrl = storageRef.getDownloadURL();
+        final imageUrl = await storageRef.getDownloadURL();
         print(imageUrl);
       }
+
+      setState(() {
+        _isAuthenticating = false;
+      });
     } on FirebaseAuthException catch (error) {
       if (error.code == 'email-already-in-use') {
         // ...
@@ -156,10 +160,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               ),
                               child: Text(_isLogin ? "Login" : 'SignuP'),
                             ),
-
                           SizedBox(height: 16),
-                          if (!_isAuthenticating) CircularProgressIndicator(),
-
                           if (!_isAuthenticating)
                             TextButton(
                               onPressed: () {

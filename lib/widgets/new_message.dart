@@ -18,7 +18,8 @@ class _NewMessageState extends State<NewMessage> {
     if (enterdMessage.trim().isEmpty) {
       return;
     }
-
+    FocusScope.of(context).unfocus();
+    _messageController.clear();
     final user = FirebaseAuth.instance.currentUser!;
 
     final userData = await FirebaseFirestore.instance
@@ -32,8 +33,6 @@ class _NewMessageState extends State<NewMessage> {
       'userId': user.uid,
       'userName': userData.data()!["UserName"],
     });
-
-    _messageController.clear();
   }
 
   @override

@@ -144,7 +144,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 return null;
                               },
                               onSaved: (value) {
-                                value = _enteredUsername;
+                                _enteredUsername = value!;
                               },
                             ),
                           TextFormField(
